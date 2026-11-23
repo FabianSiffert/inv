@@ -65,10 +65,12 @@ export default function PokemonSuggestions(props: PokemonSuggestionsProps) {
     window.scrollTo(0, 0)
   }
 
+  const hasBackdrop = !props.inline && !props.hasLocalResults
+
   return (
     <>
-      {!props.inline && !props.hasLocalResults && <div className={styles.backdrop} onClick={closeSearch} aria-hidden='true' />}
-      <ul className={styles.suggestions} aria-label={t.suggestions}>
+      {hasBackdrop && <div className={styles.backdrop} onClick={closeSearch} aria-hidden='true' />}
+      <ul className={hasBackdrop ? styles.suggestions : `${styles.suggestions} ${styles.withScrim}`} aria-label={t.suggestions}>
         {suggestions.map((entry) => (
           <li key={entry.number}>
             <Link className={styles.suggestion} to={pokemonPath(entry.number)} onClick={leave}>

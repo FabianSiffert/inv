@@ -26,6 +26,19 @@
       );
       box-shadow: 0 0.4rem 1.2rem var(--shadow-color);
     }
+
+    &.withScrim::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      top: -1.25rem;
+      right: -1.25rem;
+      bottom: calc(-1 * (1.25rem + env(safe-area-inset-bottom, 0px) + 3.5rem + 0.6rem));
+      left: -1.25rem;
+      background-color: var(--scrim-color);
+      backdrop-filter: blur(0.25rem);
+      -webkit-backdrop-filter: blur(0.25rem);
+    }
   }
 }
 
