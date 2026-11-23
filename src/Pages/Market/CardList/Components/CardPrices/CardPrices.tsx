@@ -12,7 +12,7 @@ import styles from './CardPrices.module.scss'
 
 function PriceUpdatedAt({ updatedAt }: { updatedAt?: string }) {
   const t = useStrings()
-  const formatted = formatPriceDate(updatedAt, t.locale)
+  const formatted = formatPriceDate(updatedAt)
   if (formatted == undefined) {
     return null
   }

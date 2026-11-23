@@ -11,7 +11,7 @@ export const formatSetReleaseDate = (releaseDate: string | undefined, t: Strings
   return parsed.toLocaleDateString(t.locale, { month: 'long', year: 'numeric' })
 }
 
-export const formatPriceDate = (updatedAt: string | undefined, locale: string): string | undefined => {
+export const formatPriceDate = (updatedAt: string | undefined): string | undefined => {
   if (updatedAt == undefined) {
     return undefined
   }
@@ -19,5 +19,5 @@ export const formatPriceDate = (updatedAt: string | undefined, locale: string): 
   if (Number.isNaN(parsed.getTime())) {
     return undefined
   }
-  return parsed.toLocaleDateString(locale, { month: 'long', year: 'numeric' })
+  return parsed.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' })
 }
