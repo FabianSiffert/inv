@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { AdminCardActions } from '../../../../../Components/ImageOverrideDialog/ImageOverrideDialog'
+import { AdminCardActions, AdminImageBadges } from '../../../../../Components/ImageOverrideDialog/ImageOverrideDialog'
 import { UrgencyPicker } from '../../../../../Components/UrgencyPicker/UrgencyPicker'
 import { PokemonCard } from '../../../../../util/api/pokemonTGC/model/PokemonCard'
 import { useImageOverride } from '../../../../../util/overrides/cardOverrides'
@@ -44,6 +44,7 @@ export function MobileCardDetails(props: MobileCardDetailsProps) {
           <div className={styles.cardImageAndBaseInfo}>
             <button type='button' className={styles.cardImageFrame} onClick={() => setZoomOpen(true)} aria-label={t.zoomInto(cardName)}>
               <CardImage className={styles.cardImage} sources={imageSources} alt={cardName} pokedexNumber={pokedexNumber} />
+              <AdminImageBadges card={props.card} />
             </button>
             <CardBaseDetails card={props.card} print={props.print} onClose={props.onClose} />
           </div>

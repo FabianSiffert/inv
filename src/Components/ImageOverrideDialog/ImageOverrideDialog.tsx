@@ -18,14 +18,23 @@ export function AdminCardActions({ card, className }: { card: PokemonCard; class
   return <AdminActions card={card} className={className} />
 }
 
-function AdminActions({ card, className }: { card: PokemonCard; className?: string }) {
+export function AdminImageBadges({ card }: { card: PokemonCard }) {
+  const { isAdmin } = useContext(AdminContext)
+  if (!isAdmin) {
+    return null
+  }
+  return <ImageBadges card={card} />
+}
+
+function ImageBadges({ card }: { card: PokemonCard }) {
   const t = useStrings()
-  const [isOpen, setOpen] = useState(false)
   const isOriginalAvailable = useOriginalImageAvailable(card.id)
   const isStored = useImageOverride(card.id)?.isStored == true
-
+  if (!isStored && !isOriginalAvailable) {
+    return null
+  }
   return (
-    <div className={className}>
+    <span className={styles.imageBadges}>
       {isStored && (
         <span className={styles.storedBadge} title={t.storedOnServerHint}>
           {t.storedOnServer}
@@ -36,6 +45,16 @@ function AdminActions({ card, className }: { card: PokemonCard; className?: stri
           {t.originalImageAvailable}
         </span>
       )}
+    </span>
+  )
+}
+
+function AdminActions({ card, className }: { card: PokemonCard; className?: string }) {
+  const t = useStrings()
+  const [isOpen, setOpen] = useState(false)
+
+  return (
+    <div className={className}>
       <button type='button' className={styles.editChip} title={t.editCard} onClick={() => setOpen(true)}>
         {t.edit}
       </button>

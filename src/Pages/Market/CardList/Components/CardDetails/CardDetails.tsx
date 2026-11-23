@@ -2,7 +2,7 @@ import { useContext, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { CopyButton } from '../../../../../Components/CopyButton/CopyButton'
 import { FavoriteButton } from '../../../../../Components/FavoriteButton/FavoriteButton'
-import { AdminCardActions } from '../../../../../Components/ImageOverrideDialog/ImageOverrideDialog'
+import { AdminCardActions, AdminImageBadges } from '../../../../../Components/ImageOverrideDialog/ImageOverrideDialog'
 import { UrgencyPicker } from '../../../../../Components/UrgencyPicker/UrgencyPicker'
 import { PokemonCard, PokemonCardProp } from '../../../../../util/api/pokemonTGC/model/PokemonCard'
 import { spriteUrl } from '../../../../../util/api/pokemonTGC/model/Pokemon'
@@ -56,6 +56,7 @@ export function CardDetails(props: CardDetailsProps) {
           <div className={styles.imageColumn}>
             <button type='button' className={styles.cardLargeImage} onClick={() => setZoomOpen(true)} aria-label={t.zoomInto(cardName)}>
               <CardImage sources={imageSources} alt={cardName} pokedexNumber={pokedexNumber} />
+              <AdminImageBadges card={props.card} />
             </button>
             {props.navigation && <CardNavigation {...props.navigation} />}
           </div>
