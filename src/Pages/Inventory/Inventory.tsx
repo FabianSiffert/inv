@@ -51,7 +51,7 @@ export default function Inventory() {
   return (
     <div className={styles.inventoryPage}>
       <div className={styles.backdrop} aria-hidden='true' />
-      <PokemonSuggestions />
+      <PokemonSuggestions hasLocalResults={favoriteEntries.length > 0} />
       {!isLoading && !isFetching && allFavoriteEntries.length > 0 && <CardsValue entries={allFavoriteEntries} label={t.favoritesValue} />}
       {error && (
         <div className={styles.error} role='alert'>

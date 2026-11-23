@@ -185,7 +185,7 @@ function PokemonCards(props: PokemonCardsProps) {
           </Link>
         </div>
       )}
-      <PokemonSuggestions excludedNumber={props.pokedexNumber} />
+      <PokemonSuggestions excludedNumber={props.pokedexNumber} hasLocalResults={(visibleCards?.length ?? 0) > 0} />
       {pokemon && (
         <div className={styles.pageTitle}>
           <img

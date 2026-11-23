@@ -51,7 +51,6 @@ export default function Artists() {
 
   return (
     <div className={styles.page}>
-      <PokemonSuggestions />
       {slug == undefined ? (
         <ArtistOverview artists={artists} isFetching={isIndexFetching} error={indexError} />
       ) : (
@@ -94,6 +93,7 @@ function ArtistOverview(props: ArtistOverviewProps) {
 
   return (
     <>
+      <PokemonSuggestions hasLocalResults={visibleArtists.length > 0} />
       <div className={styles.pageTitle}>
         <h1 className={styles.pageHeadline}>{t.artists}</h1>
         {artists.length > 0 && <span className={styles.pageCount}>{t.artistCount(artists.length)}</span>}
@@ -126,6 +126,7 @@ function ArtistCards(props: ArtistCardsProps) {
 
   return (
     <>
+      <PokemonSuggestions hasLocalResults={(visibleCards?.length ?? 0) > 0} />
       {artist && (
         <div className={styles.pageTitle}>
           {artist.pokemonNumber != undefined && (

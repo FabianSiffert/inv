@@ -21,6 +21,7 @@ interface PokemonSuggestionsProps {
   excludedNumber?: number
   excludedSetId?: string
   inline?: boolean
+  hasLocalResults?: boolean
 }
 
 export default function PokemonSuggestions(props: PokemonSuggestionsProps) {
@@ -66,8 +67,8 @@ export default function PokemonSuggestions(props: PokemonSuggestionsProps) {
 
   return (
     <>
-      {!props.inline && <div className={styles.backdrop} onClick={closeSearch} aria-hidden='true' />}
-      <ul className={props.inline ? `${styles.suggestions} ${styles.inline}` : styles.suggestions} aria-label={t.suggestions}>
+      {!props.inline && !props.hasLocalResults && <div className={styles.backdrop} onClick={closeSearch} aria-hidden='true' />}
+      <ul className={styles.suggestions} aria-label={t.suggestions}>
         {suggestions.map((entry) => (
           <li key={entry.number}>
             <Link className={styles.suggestion} to={pokemonPath(entry.number)} onClick={leave}>

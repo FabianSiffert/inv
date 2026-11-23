@@ -83,7 +83,7 @@ export default function Market() {
 
   return (
     <div className={styles.market}>
-      <PokemonSuggestions excludedSetId={selectedSet?.id} />
+      <PokemonSuggestions excludedSetId={selectedSet?.id} hasLocalResults={(visibleCards?.length ?? 0) > 0} />
       <CardListStatus
         hasSelectedEra={currentlySelectedPokemonSeries != undefined}
         hasSelectedSet={currentlySelectedPokemonSet != undefined}
