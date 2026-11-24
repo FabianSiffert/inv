@@ -42,7 +42,7 @@ see [Accounts](#accounts).
 ```
 npm run dev            # dev server on :3030
 npm run build          # typecheck, then production build into dist/
-npm run start          # serve dist/ on 0.0.0.0:3030 (what the server runs)
+npm run start          # serve dist/ on 127.0.0.1:3030 behind nginx (what the server runs)
 npm run preview        # serve dist/ on localhost only
 npm run fetch-data     # refresh the set and card snapshot in data/
 npm run build-indexes  # rebuild pokemon, artist and search indexes from the card files, no network
