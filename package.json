@@ -27,14 +27,14 @@
     "firebase": "^13.2.0",
     "idb-keyval": "^6.3.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.3.1",
     "react-router-dom": "^7.18.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@types/node": "^22.20.5",
     "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18",
+    "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "eslint": "^9.39.5",
     "eslint-plugin-react": "^7.33.2",
