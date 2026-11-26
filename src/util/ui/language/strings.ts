@@ -8,6 +8,8 @@ export type SortModeLabel = 'price' | 'number' | 'name' | 'rarity' | 'release' |
 
 export type UrgencyLabel = 'asap' | 'urgent' | 'normal' | 'later'
 
+export type ThemeLabel = 'system' | 'light' | 'dark'
+
 export type CardLanguageLabel = 'ja'
 
 const en = {
@@ -156,8 +158,13 @@ const en = {
   menu: 'Menu',
   menuSignedInAs: (account: string) => `Menu, signed in as ${account}`,
   account: 'account',
-  darkTheme: 'Dark mode',
-  lightTheme: 'Light mode',
+  currentTheme: (theme: string) => `Theme: ${theme}`,
+  themes: {
+    system: 'System',
+    light: 'Light',
+    dark: 'Dark'
+  } as Record<ThemeLabel, string>,
+  switchTheme: (current: string, next: string) => `${current}, switch to “${next}”`,
   toggleLanguage: 'German',
   signOut: 'Sign out',
   signingIn: 'Signing in',
@@ -374,8 +381,13 @@ const de: Strings = {
   menu: 'Menü',
   menuSignedInAs: (account: string) => `Menü, angemeldet als ${account}`,
   account: 'Konto',
-  darkTheme: 'Dunkler Modus',
-  lightTheme: 'Heller Modus',
+  currentTheme: (theme: string) => `Darstellung: ${theme}`,
+  themes: {
+    system: 'System',
+    light: 'Hell',
+    dark: 'Dunkel'
+  } as Record<ThemeLabel, string>,
+  switchTheme: (current: string, next: string) => `${current}, zu „${next}“ wechseln`,
   toggleLanguage: 'Englisch',
   signOut: 'Abmelden',
   signingIn: 'Anmeldung läuft',

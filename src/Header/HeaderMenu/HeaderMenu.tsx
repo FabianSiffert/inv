@@ -2,7 +2,7 @@ import { ReactNode, useContext, useEffect, useRef, useState } from 'react'
 import { AdminContext } from '../../util/admin/AdminProvider'
 import { AuthContext } from '../../util/auth/AuthProvider'
 import { LanguageContext, useStrings } from '../../util/ui/language/LanguageProvider'
-import { ThemeContext } from '../../util/ui/theme/ThemeProvider'
+import { nextThemePreference, ThemeContext } from '../../util/ui/theme/ThemeProvider'
 import { PretzelIcon, TeacupIcon } from '../LanguageToggle/LanguageIcons'
 import { EspeonIcon, UmbreonIcon } from '../ThemeToggle/ThemeIcons'
 import { GoldenMasterBallIcon, MasterBallIcon, PokeBallIcon, SignOutIcon } from './HeaderMenuIcons'
@@ -10,7 +10,7 @@ import styles from './HeaderMenu.module.scss'
 
 export default function HeaderMenu() {
   const { status, user, error, signIn, signOut } = useContext(AuthContext)
-  const { darkTheme, toggleTheme } = useContext(ThemeContext)
+  const { themePreference, darkTheme, cycleTheme } = useContext(ThemeContext)
   const { germanNames, toggleLanguage } = useContext(LanguageContext)
   const { isAdmin } = useContext(AdminContext)
   const t = useStrings()
@@ -70,8 +70,12 @@ export default function HeaderMenu() {
       </button>
       {isOpen && (
         <div className={styles.panel} role='dialog' aria-label={t.menu}>
-          <MenuRow icon={darkTheme ? <EspeonIcon /> : <UmbreonIcon />} onClick={() => choose(toggleTheme)}>
-            {darkTheme ? t.lightTheme : t.darkTheme}
+          <MenuRow
+            icon={darkTheme ? <UmbreonIcon /> : <EspeonIcon />}
+            onClick={cycleTheme}
+            label={t.switchTheme(t.currentTheme(t.themes[themePreference]), t.themes[nextThemePreference(themePreference)])}
+          >
+            {t.currentTheme(t.themes[themePreference])}
           </MenuRow>
           <MenuRow icon={germanNames ? <TeacupIcon /> : <PretzelIcon />} onClick={() => choose(toggleLanguage)}>
             {t.toggleLanguage}
@@ -112,6 +116,7 @@ interface MenuRowProps {
   onClick: () => void
   disabled?: boolean
   className?: string
+  label?: string
   children: ReactNode
 }
 
@@ -122,6 +127,7 @@ function MenuRow(props: MenuRowProps) {
       className={props.className ? `${styles.row} ${props.className}` : styles.row}
       onClick={props.onClick}
       disabled={props.disabled}
+      aria-label={props.label}
     >
       <span className={styles.rowIcon}>{props.icon}</span>
       <span>{props.children}</span>

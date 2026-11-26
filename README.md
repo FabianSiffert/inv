@@ -113,8 +113,9 @@ and its hot-reload WebSocket makes phones prompt for local network access.
   of a set.
 - **Card grids** use `content-visibility: auto` so off-screen tiles cost almost nothing, and images
   load lazily with their aspect ratio reserved.
-- **Theming** is a `data-theme` attribute on `<html>`, stored in `localStorage` and falling back to
-  the OS preference. An inline script in `index.html` applies it before first paint.
+- **Theming** is a `data-theme` attribute on `<html>`. The menu cycles System, Light and Dark;
+  System is the default and follows the OS preference live. An explicit choice is stored in
+  `localStorage`. An inline script in `index.html` applies it before first paint.
 - **Favorites** live in `localStorage` for guests and in Firestore for signed-in users. Firebase is
   loaded lazily, so guests never download it.
 
