@@ -1,4 +1,7 @@
-import React, { createContext, ReactNode, useCallback, useMemo, useState } from 'react'
+import React, { createContext, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
+const busyShowDelay = 250
+const busyMinimumVisible = 500
 
 interface ContextProps {
   headerItem?: ReactNode
@@ -28,14 +31,30 @@ const HeaderProvider: React.FC<Props> = ({ children }) => {
 
   const setBusy = useCallback((busy: boolean) => setIsBusy(busy), [])
 
+  const [isBusyShown, setBusyShown] = useState(false)
+  const busyShownAt = useRef(0)
+
+  useEffect(() => {
+    if (isBusy) {
+      const timeout = window.setTimeout(() => {
+        busyShownAt.current = Date.now()
+        setBusyShown(true)
+      }, busyShowDelay)
+      return () => window.clearTimeout(timeout)
+    }
+    const remaining = busyMinimumVisible - (Date.now() - busyShownAt.current)
+    const timeout = window.setTimeout(() => setBusyShown(false), Math.max(remaining, 0))
+    return () => window.clearTimeout(timeout)
+  }, [isBusy])
+
   const contextValue = useMemo(
     () => ({
       headerItem: headerMiddleItem,
       setHeaderItem,
-      isBusy,
+      isBusy: isBusyShown,
       setBusy
     }),
-    [headerMiddleItem, setHeaderItem, isBusy, setBusy]
+    [headerMiddleItem, setHeaderItem, isBusyShown, setBusy]
   )
 
   return <HeaderContext.Provider value={contextValue}>{children}</HeaderContext.Provider>

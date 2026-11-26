@@ -14,16 +14,14 @@ export default function Header() {
         <div className={styles.title}>
           <Title />
         </div>
+        <div className={styles.busySlot}>
+          <LoadingSpinner isActive={isBusy} />
+        </div>
         <div className={styles.middleItem}>{headerItem}</div>
         <div className={styles.navigation}>
           <WebNavigation />
         </div>
       </div>
-      {isBusy && (
-        <div className={styles.headerSpinner}>
-          <LoadingSpinner small />
-        </div>
-      )}
     </div>
   )
 }

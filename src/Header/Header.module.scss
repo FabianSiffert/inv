@@ -44,12 +44,18 @@
   }
 }
 
-.headerSpinner {
-  position: absolute;
-  left: 50%;
-  bottom: -0.4rem;
-  transform: translateX(-50%);
-  pointer-events: none;
+.busySlot {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  width: 1.4rem;
+  margin-left: -0.6rem;
+
+  @media (max-width: $smallScreen - 1px) {
+    order: 2;
+    margin-left: -0.35rem;
+    margin-right: auto;
+  }
 }
 
 .navigation {
