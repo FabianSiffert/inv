@@ -20,8 +20,3 @@ export const variantLabels = (card: PokemonCard): string[] => {
   }
   return labels
 }
-
-export const printingLabels = (card: PokemonCard): string[] =>
-  card.prints != undefined
-    ? card.prints.map((print) => print.label)
-    : [...(card.variants?.normal ? ['Normal'] : []), ...variantLabels(card)]

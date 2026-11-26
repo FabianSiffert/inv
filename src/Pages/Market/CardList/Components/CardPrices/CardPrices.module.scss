@@ -78,6 +78,14 @@
   white-space: nowrap;
 }
 
+.currentPrint {
+  @include pastel(var(--elementLavender), 35%);
+
+  .priceRowLabel {
+    color: var(--color);
+  }
+}
+
 .priceAmount {
   @include typoFieldValue;
   font-variant-numeric: tabular-nums;

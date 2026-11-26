@@ -119,17 +119,21 @@ export const cardPriceRows = (card: PokemonCard): PriceTableRow[] => {
   const knownLabels = new Set(rows.map((row) => row.label))
   for (const print of card.prints ?? []) {
     const isMainProduct = print.cardmarket?.url != undefined && print.cardmarket.url == mainUrl
-    if (knownLabels.has(print.label) || isMainProduct || print.cardmarket?.trendPrice == undefined) {
+    if (knownLabels.has(print.label) || isMainProduct) {
       continue
     }
+    const trendPrice = print.cardmarket?.trendPrice
     rows.push({
       label: print.label,
       isMain: false,
-      cardmarket: {
-        amount: print.cardmarket.lowestTrendPrice ?? print.cardmarket.trendPrice,
-        highestAmount: print.cardmarket.highestTrendPrice,
-        url: cardmarketLink(print.cardmarket.url)
-      },
+      cardmarket:
+        trendPrice == undefined
+          ? undefined
+          : {
+              amount: print.cardmarket?.lowestTrendPrice ?? trendPrice,
+              highestAmount: print.cardmarket?.highestTrendPrice,
+              url: cardmarketLink(print.cardmarket?.url)
+            },
       tcgplayer: print.tcgplayer?.marketPrice == undefined ? undefined : { amount: print.tcgplayer.marketPrice, url: print.tcgplayer.url }
     })
     knownLabels.add(print.label)

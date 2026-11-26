@@ -8,7 +8,6 @@ import { PokemonCard, PokemonCardProp } from '../../../../../util/api/pokemonTGC
 import { spriteUrl } from '../../../../../util/api/pokemonTGC/model/Pokemon'
 import { setPath } from '../../../../../util/api/pokemonTGC/model/PokemonSet'
 import { mainSetIdOf } from '../../../../../util/api/pokemonTGC/setGroups'
-import { printingLabels } from '../../../../../util/cardVariants'
 import { formatSetReleaseDate } from '../../../../../util/format/date'
 import { useImageOverride } from '../../../../../util/overrides/cardOverrides'
 import { isSecretRare } from '../../../../../util/ui/sort/rarity'
@@ -66,7 +65,7 @@ export function CardDetails(props: CardDetailsProps) {
             <CardBaseDetails card={props.card} print={props.print} onClose={props.onClose} />
             <SetInformation card={props.card} />
             <UrgencyPicker card={props.card} print={props.print} />
-            <CardPrices card={props.card} />
+            <CardPrices card={props.card} print={props.print} />
           </div>
         </div>
       </div>
@@ -138,33 +137,7 @@ export function CardBaseDetails(props: CardBaseDetailsProps) {
         {props.card.evolvesFrom && <span className={styles.metaMuted}>{t.evolvesFrom(props.card.evolvesFrom)}</span>}
         {props.card.artist && <ArtistLink name={props.card.artist} className={styles.artistChip} fallbackClassName={styles.metaMuted} />}
       </div>
-      <Printings card={props.card} print={props.print} />
       {pokedexNumber != undefined && <AllCardsOfPokemonLink pokedexNumber={pokedexNumber} />}
-    </div>
-  )
-}
-
-function Printings({ card, print }: { card: PokemonCard; print?: string }) {
-  const t = useStrings()
-  const labels = printingLabels(card)
-  if (labels.length < 2) {
-    return null
-  }
-
-  return (
-    <div className={styles.printings}>
-      <span className={styles.printingsLabel}>{t.printings}</span>
-      <ul className={styles.printingList} aria-label={t.printings}>
-        {labels.map((label) => (
-          <li
-            key={label}
-            className={label == print ? `${styles.printingChip} ${styles.currentPrinting}` : styles.printingChip}
-            aria-current={label == print ? 'true' : undefined}
-          >
-            {label}
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }

@@ -41,7 +41,7 @@ function PriceCellContent({ cell, currency, emphasized }: { cell?: PriceCell; cu
   )
 }
 
-export function CardPrices(props: PokemonCardProp) {
+export function CardPrices(props: PokemonCardProp & { print?: string }) {
   const rows = cardPriceRows(props.card)
   const cardmarketUrl = props.card.cardmarket?.url
   const t = useStrings()
@@ -68,7 +68,11 @@ export function CardPrices(props: PokemonCardProp) {
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.label}>
+              <tr
+                key={row.label}
+                className={row.label == props.print ? styles.currentPrint : undefined}
+                aria-current={row.label == props.print ? 'true' : undefined}
+              >
                 <th scope='row' className={styles.priceRowLabel}>
                   <FavoriteButton card={props.card} print={row.isMain ? undefined : row.label} small />
                   {row.label}

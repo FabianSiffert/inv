@@ -50,7 +50,7 @@ export function MobileCardDetails(props: MobileCardDetailsProps) {
           </div>
           <SetInformation card={props.card} />
           <UrgencyPicker card={props.card} print={props.print} />
-          <CardPrices card={props.card} />
+          <CardPrices card={props.card} print={props.print} />
         </div>
       </div>
       {isZoomOpen && <ImageZoom sources={imageSources} alt={cardName} pokedexNumber={pokedexNumber} onClose={() => setZoomOpen(false)} />}
