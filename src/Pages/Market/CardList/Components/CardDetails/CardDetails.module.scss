@@ -213,6 +213,10 @@
   padding: 0.3rem 0.7rem;
 }
 
+.secretChip {
+  @include pastel(var(--elementBlue), 45%);
+}
+
 .metaMuted {
   color: var(--secondary-color);
 }

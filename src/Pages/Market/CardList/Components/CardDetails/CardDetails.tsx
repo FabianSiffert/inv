@@ -10,6 +10,7 @@ import { setPath } from '../../../../../util/api/pokemonTGC/model/PokemonSet'
 import { mainSetIdOf } from '../../../../../util/api/pokemonTGC/setGroups'
 import { formatSetReleaseDate } from '../../../../../util/format/date'
 import { useImageOverride } from '../../../../../util/overrides/cardOverrides'
+import { isSecretRare } from '../../../../../util/ui/sort/rarity'
 import { useLocalizedName, useStrings } from '../../../../../util/ui/language/LanguageProvider'
 import { SearchContext } from '../../../../../util/ui/search/SearchProvider'
 import { cardShareLink } from '../../../../../util/shareLinks'
@@ -125,9 +126,15 @@ export function CardBaseDetails(props: CardBaseDetailsProps) {
       </div>
       <div className={styles.metaRow}>
         {props.card.rarity && <span className={styles.metaChip}>{props.card.rarity}</span>}
-        <span className={styles.metaChip}>
-          {props.card.number}/{props.card.set.printedTotal}
-        </span>
+        {isSecretRare(props.card) ? (
+          <span className={`${styles.metaChip} ${styles.secretChip}`} title={t.secretRareHint(props.card.set.printedTotal)}>
+            {props.card.number}/{props.card.set.printedTotal} · {t.secret}
+          </span>
+        ) : (
+          <span className={styles.metaChip}>
+            {props.card.number}/{props.card.set.printedTotal}
+          </span>
+        )}
         {props.card.evolvesFrom && <span className={styles.metaMuted}>{t.evolvesFrom(props.card.evolvesFrom)}</span>}
         {props.card.artist && <ArtistLink name={props.card.artist} className={styles.artistChip} fallbackClassName={styles.metaMuted} />}
       </div>

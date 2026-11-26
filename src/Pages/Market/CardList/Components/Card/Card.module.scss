@@ -138,6 +138,16 @@
   color: var(--secondary-color);
 }
 
+.secretMark {
+  @include surface($surfaceRadiusSmall);
+  @include pastel(var(--elementBlue), 50%);
+  @include typoFieldValue;
+  margin-left: 0.35rem;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.55rem;
+  color: var(--color);
+}
+
 .cardPrint {
   @include surface($surfaceRadiusSmall);
   @include pastel(var(--elementLavender), 50%);

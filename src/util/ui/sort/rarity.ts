@@ -37,3 +37,11 @@ export const rarityTier = (rarity: string): RarityTier => {
   }
   return groupIndex < highTierGroupCount ? 'high' : 'regular'
 }
+
+const nonSecretRarities = ['Common', 'Promo']
+
+export const isSecretRare = (card: PokemonCard): boolean =>
+  /^\d+$/.test(card.number) &&
+  card.set.printedTotal > 0 &&
+  Number(card.number) > card.set.printedTotal &&
+  !nonSecretRarities.includes(card.rarity ?? '')

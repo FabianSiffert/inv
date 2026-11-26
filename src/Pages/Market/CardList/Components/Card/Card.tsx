@@ -7,6 +7,7 @@ import { useImageOverride } from '../../../../../util/overrides/cardOverrides'
 import { FavoritesContext } from '../../../../../util/ui/favorites/FavoritesProvider'
 import { useLocalizedName, useStrings } from '../../../../../util/ui/language/LanguageProvider'
 import { printDisplayPrice } from '../../../../../util/cardPrice'
+import { isSecretRare } from '../../../../../util/ui/sort/rarity'
 import { formatPriceParts } from '../../../../../util/format/price'
 import { CardDetails, CardNavigationProps } from '../CardDetails/CardDetails'
 import { CardImage } from '../CardImage/CardImage'
@@ -59,6 +60,7 @@ export function Card({
   onClose
 }: CardWithDetailsProps) {
   const cardName = useLocalizedName(card)
+  const t = useStrings()
   const { favorites, urgencyOf } = useContext(FavoritesContext)
   const imageOverride = useImageOverride(card.id)?.source
   const showFavoriteMark =
@@ -101,6 +103,11 @@ export function Card({
         {showNumber && (
           <div className={styles.cardNumber}>
             {card.number}/{card.set.printedTotal}
+            {isSecretRare(card) && (
+              <span className={styles.secretMark} title={t.secretRareHint(card.set.printedTotal)}>
+                {t.secret}
+              </span>
+            )}
           </div>
         )}
         <CardPrice card={card} print={print} />
