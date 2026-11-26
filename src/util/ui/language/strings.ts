@@ -64,6 +64,8 @@ const en = {
 
   allCardsOf: (count: number, name: string) => `All ${count} ${name} cards`,
   pricedOf: (priced: number, total: number) => `${priced} of ${total} cards priced`,
+  convertedFromUsd: (count: number) => `${count} converted from USD`,
+  usdConversionRate: (rate: string) => `Converted at 1 USD = ${rate}`,
   germanListings: 'German listings on Cardmarket',
 
   favorites: 'Favorites',
@@ -289,6 +291,8 @@ const de: Strings = {
 
   allCardsOf: (count: number, name: string) => `Alle ${count} ${name}-Karten`,
   pricedOf: (priced: number, total: number) => `${priced} von ${total} Karten mit Preis`,
+  convertedFromUsd: (count: number) => `${count} aus USD umgerechnet`,
+  usdConversionRate: (rate: string) => `Umgerechnet mit 1 USD = ${rate}`,
   germanListings: 'Deutsche Angebote auf Cardmarket',
 
   favorites: 'Favoriten',

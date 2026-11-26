@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
+import { useEurPerUsd } from '../../util/api/pokemonTGC/hooks'
 import { CardEntry } from '../../util/api/pokemonTGC/model/PokemonCard'
 import { printDisplayPrice } from '../../util/cardPrice'
-import { formatPrice } from '../../util/format/price'
+import { formatPrice, toEur } from '../../util/format/price'
 import { useStrings } from '../../util/ui/language/LanguageProvider'
 import styles from './CardsValue.module.scss'
 
@@ -13,13 +14,19 @@ interface CardsValueProps {
 
 export default function CardsValue({ entries, label, meta }: CardsValueProps) {
   const t = useStrings()
-  const { total, pricedCount } = useMemo(() => {
-    const euroPrices = entries
-      .map((entry) => printDisplayPrice(entry.card, entry.print))
-      .filter((price) => price?.currency == 'EUR')
-      .map((price) => price!.amount)
-    return { total: euroPrices.reduce((sum, price) => sum + price, 0), pricedCount: euroPrices.length }
-  }, [entries])
+  const eurPerUsd = useEurPerUsd()
+  const { total, pricedCount, convertedCount } = useMemo(() => {
+    const prices = entries.flatMap((entry) => {
+      const price = printDisplayPrice(entry.card, entry.print)
+      return price == undefined ? [] : [price]
+    })
+    return {
+      total: prices.reduce((sum, price) => sum + toEur(price.amount, price.currency, eurPerUsd), 0),
+      pricedCount: prices.length,
+      convertedCount: prices.filter((price) => price.currency == 'USD').length
+    }
+  }, [entries, eurPerUsd])
+  const rate = formatPrice(eurPerUsd)
 
   if (pricedCount == 0) {
     return null
@@ -36,6 +43,11 @@ export default function CardsValue({ entries, label, meta }: CardsValueProps) {
       <span className={styles.label}>{label}</span>
       <span className={styles.amount}>{formatPrice(total)}</span>
       {pricedCount < entries.length && <span className={styles.coverage}>{t.pricedOf(pricedCount, entries.length)}</span>}
+      {convertedCount > 0 && (
+        <span className={styles.coverage} title={rate && t.usdConversionRate(rate)}>
+          {t.convertedFromUsd(convertedCount)}
+        </span>
+      )}
     </div>
   )
 }
