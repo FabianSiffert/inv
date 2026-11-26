@@ -32,17 +32,21 @@ const tapZoomScale = 2.5
 const dragThreshold = 6
 const doubleTapMilliseconds = 300
 const wheelZoomSpeed = 0.002
+const maxTiltDegrees = 9
 const initialTransform: Transform = { scale: 1, x: 0, y: 0 }
 
 const distance = (a: Point, b: Point): number => Math.hypot(a.x - b.x, a.y - b.y)
 const midpoint = (a: Point, b: Point): Point => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 })
 const clampValue = (value: number, limit: number): number => Math.min(Math.max(value, -limit), limit)
+const clampUnit = (value: number): number => Math.min(Math.max(value, 0), 1)
+const tiltProperties = ['--tilt-x', '--tilt-y', '--glare-x', '--glare-y']
 
 export function ImageZoom({ sources, alt, pokedexNumber, onClose }: ImageZoomProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const t = useStrings()
   const stageRef = useRef<HTMLDivElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
+  const tiltRef = useRef<HTMLDivElement>(null)
   useModalBehaviour(containerRef, onClose)
 
   const [transform, setTransform] = useState<Transform>(initialTransform)
@@ -83,6 +87,30 @@ export function ImageZoom({ sources, alt, pokedexNumber, onClose }: ImageZoomPro
     return rect != undefined && point.x >= rect.left && point.x <= rect.right && point.y >= rect.top && point.y <= rect.bottom
   }
 
+  const tiltTowards = (point: Point) => {
+    const tilt = tiltRef.current
+    const rect = frameRef.current?.getBoundingClientRect()
+    if (tilt == null || rect == undefined) {
+      return
+    }
+    const relativeX = clampUnit((point.x - rect.left) / rect.width)
+    const relativeY = clampUnit((point.y - rect.top) / rect.height)
+    tilt.classList.add(styles.tilting)
+    tilt.style.setProperty('--tilt-x', `${(0.5 - relativeY) * 2 * maxTiltDegrees}deg`)
+    tilt.style.setProperty('--tilt-y', `${(relativeX - 0.5) * 2 * maxTiltDegrees}deg`)
+    tilt.style.setProperty('--glare-x', `${relativeX * 100}%`)
+    tilt.style.setProperty('--glare-y', `${relativeY * 100}%`)
+  }
+
+  const resetTilt = () => {
+    const tilt = tiltRef.current
+    if (tilt == null) {
+      return
+    }
+    tilt.classList.remove(styles.tilting)
+    tiltProperties.forEach((property) => tilt.style.removeProperty(property))
+  }
+
   const toggleZoom = (point: Point) => {
     const current = transformRef.current
     setTransform(current.scale > 1 ? initialTransform : zoomAround(point, point, tapZoomScale, current))
@@ -114,6 +142,7 @@ export function ImageZoom({ sources, alt, pokedexNumber, onClose }: ImageZoomPro
     if (event.pointerType == 'mouse' && event.button != 0) {
       return
     }
+    resetTilt()
     event.currentTarget.setPointerCapture(event.pointerId)
     const point = { x: event.clientX, y: event.clientY }
     pointers.current.set(event.pointerId, point)
@@ -132,10 +161,17 @@ export function ImageZoom({ sources, alt, pokedexNumber, onClose }: ImageZoomPro
   }
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    const point = { x: event.clientX, y: event.clientY }
+    if (event.pointerType == 'mouse' && pointers.current.size == 0 && transformRef.current.scale == 1) {
+      if (isOnImage(point)) {
+        tiltTowards(point)
+      } else {
+        resetTilt()
+      }
+    }
     if (!pointers.current.has(event.pointerId)) {
       return
     }
-    const point = { x: event.clientX, y: event.clientY }
     pointers.current.set(event.pointerId, point)
     const current = gesture.current
     if (current?.kind == 'pinch') {
@@ -178,6 +214,7 @@ export function ImageZoom({ sources, alt, pokedexNumber, onClose }: ImageZoomPro
   }
 
   const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
+    resetTilt()
     const point = { x: event.clientX, y: event.clientY }
     const current = transformRef.current
     setTransform(zoomAround(point, point, current.scale * Math.exp(-event.deltaY * wheelZoomSpeed), current))
@@ -194,6 +231,7 @@ export function ImageZoom({ sources, alt, pokedexNumber, onClose }: ImageZoomPro
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onPointerLeave={resetTilt}
         onWheel={handleWheel}
       >
         <div
@@ -201,7 +239,10 @@ export function ImageZoom({ sources, alt, pokedexNumber, onClose }: ImageZoomPro
           className={`${styles.frame} ${isGesturing ? '' : styles.animated}`}
           style={{ transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.scale})` }}
         >
-          <CardImage className={styles.image} sources={sources} alt={alt} pokedexNumber={pokedexNumber} />
+          <div ref={tiltRef} className={styles.tilt}>
+            <CardImage className={styles.image} sources={sources} alt={alt} pokedexNumber={pokedexNumber} />
+            <div className={styles.glare} />
+          </div>
         </div>
       </div>
       <button type='button' className={styles.closeButton} aria-label={t.closeZoom} onClick={onClose}>

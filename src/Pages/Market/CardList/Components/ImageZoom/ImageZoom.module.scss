@@ -38,9 +38,47 @@ $zoomOutCursor:
   width: min(92vw, calc(88vh * 63 / 88));
   transform-origin: center;
   will-change: transform;
+  perspective: 1400px;
 
   &.animated {
     transition: transform 220ms $archEase;
+  }
+}
+
+.tilt {
+  position: relative;
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 500ms $archEase;
+  @include cardImageStyle;
+
+  &.tilting {
+    transition: transform 120ms ease-out;
+  }
+}
+
+.glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, 0.35), transparent 60%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity 400ms ease;
+
+  .tilting & {
+    opacity: 1;
+    transition-duration: 150ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt {
+    transform: none;
+  }
+
+  .glare {
+    display: none;
   }
 }
 
