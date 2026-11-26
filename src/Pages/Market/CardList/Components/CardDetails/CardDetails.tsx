@@ -126,13 +126,12 @@ export function CardBaseDetails(props: CardBaseDetailsProps) {
       </div>
       <div className={styles.metaRow}>
         {props.card.rarity && <span className={styles.metaChip}>{props.card.rarity}</span>}
-        {isSecretRare(props.card) ? (
+        <span className={styles.metaChip}>
+          {props.card.number}/{props.card.set.printedTotal}
+        </span>
+        {isSecretRare(props.card) && (
           <span className={`${styles.metaChip} ${styles.secretChip}`} title={t.secretRareHint(props.card.set.printedTotal)}>
-            {props.card.number}/{props.card.set.printedTotal} · {t.secret}
-          </span>
-        ) : (
-          <span className={styles.metaChip}>
-            {props.card.number}/{props.card.set.printedTotal}
+            {t.secret}
           </span>
         )}
         {props.card.evolvesFrom && <span className={styles.metaMuted}>{t.evolvesFrom(props.card.evolvesFrom)}</span>}
