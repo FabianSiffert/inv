@@ -1,7 +1,8 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { PokemonCard } from '../../util/api/pokemonTGC/model/PokemonCard'
 import { FavoritesContext } from '../../util/ui/favorites/FavoritesProvider'
 import { useStrings } from '../../util/ui/language/LanguageProvider'
+import RemoveFavoriteDialog from '../RemoveFavoriteDialog/RemoveFavoriteDialog'
 import styles from './FavoriteButton.module.scss'
 
 interface FavoriteButtonProps {
@@ -14,6 +15,7 @@ interface FavoriteButtonProps {
 export function FavoriteButton({ card, print, small = false, showPrint = false }: FavoriteButtonProps) {
   const { isFavorite, toggleFavorite } = useContext(FavoritesContext)
   const isFavorited = isFavorite(card.id, print)
+  const [isConfirmingRemoval, setConfirmingRemoval] = useState(false)
   const t = useStrings()
   const label = isFavorited ? t.removeFromFavorites(print) : t.addToFavorites(print)
   const classNames = [
@@ -24,20 +26,39 @@ export function FavoriteButton({ card, print, small = false, showPrint = false }
   ]
 
   return (
-    <button
-      type='button'
-      className={classNames.join(' ')}
-      aria-label={label}
-      aria-pressed={isFavorited}
-      title={label}
-      onClick={(event) => {
-        event.stopPropagation()
-        toggleFavorite(card, print)
-      }}
-    >
-      <StarIcon filled={isFavorited} />
-      {showPrint && print != undefined && <span className={styles.printLabel}>{print}</span>}
-    </button>
+    <>
+      <button
+        type='button'
+        className={classNames.join(' ')}
+        aria-label={label}
+        aria-pressed={isFavorited}
+        title={label}
+        onClick={(event) => {
+          event.stopPropagation()
+          if (isFavorited) {
+            setConfirmingRemoval(true)
+            return
+          }
+          toggleFavorite(card, print)
+        }}
+      >
+        <StarIcon filled={isFavorited} />
+        {showPrint && print != undefined && <span className={styles.printLabel}>{print}</span>}
+      </button>
+      {isConfirmingRemoval && (
+        <RemoveFavoriteDialog
+          card={card}
+          print={print}
+          onDismiss={() => setConfirmingRemoval(false)}
+          onConfirm={() => {
+            setConfirmingRemoval(false)
+            if (isFavorite(card.id, print)) {
+              toggleFavorite(card, print)
+            }
+          }}
+        />
+      )}
+    </>
   )
 }
 

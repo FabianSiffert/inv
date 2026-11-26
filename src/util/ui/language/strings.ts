@@ -88,6 +88,11 @@ const en = {
   notNow: 'Not now',
   mergeConfirm: (count: number, noun: string) => `Move ${count} ${noun}`,
 
+  removeFavoriteTitle: 'Really remove this favorite?',
+  removeFavoriteBody: (name: string, print?: string) =>
+    `${print == undefined ? name : `${name} (${print})`} will be removed from your favorites, including its purchase priority.`,
+  removeFavoriteConfirm: 'Remove',
+
   set: 'Set',
   selectSet: 'Select set',
   era: 'Era',
@@ -300,6 +305,11 @@ const de: Strings = {
   mergeWarning: 'Hinweis: Das ist neu und ohne Gewähr.',
   notNow: 'Nicht jetzt',
   mergeConfirm: (count: number, noun: string) => `${count} ${noun} verschieben`,
+
+  removeFavoriteTitle: 'Willst du den Favoriten wirklich entfernen?',
+  removeFavoriteBody: (name: string, print?: string) =>
+    `${print == undefined ? name : `${name} (${print})`} wird samt Kaufpriorität aus deinen Favoriten entfernt.`,
+  removeFavoriteConfirm: 'Entfernen',
 
   set: 'Set',
   selectSet: 'Set wählen',
