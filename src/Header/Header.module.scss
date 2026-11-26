@@ -49,13 +49,7 @@
   align-items: center;
   flex: 0 0 auto;
   width: 1.4rem;
-  margin-left: -0.6rem;
-
-  @media (max-width: $smallScreen - 1px) {
-    order: 2;
-    margin-left: -0.35rem;
-    margin-right: auto;
-  }
+  margin-left: 0.6rem;
 }
 
 .navigation {
