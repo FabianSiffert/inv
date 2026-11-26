@@ -9,6 +9,7 @@ import { noBaseParams, useCardNavigation } from '../../util/ui/cards/useCardNavi
 import { useVisibleEntries } from '../../util/ui/cards/useVisibleCards'
 import { FavoritesContext, FavoritesSource } from '../../util/ui/favorites/FavoritesProvider'
 import { useStrings } from '../../util/ui/language/LanguageProvider'
+import { useDocumentTitle, useOpenCardName } from '../../util/ui/useDocumentTitle'
 import { useIsMobile } from '../../util/ui/useIsMobile'
 import CardList from '../Market/CardList/CardList'
 import cardListStyles from '../Market/CardList/CardList.module.scss'
@@ -37,6 +38,7 @@ export default function Inventory() {
     })
   }, [setQueries, favorites])
   const favoriteEntries = useVisibleEntries(allFavoriteEntries) ?? []
+  useDocumentTitle(useOpenCardName(allFavoriteEntries, openCardId), t.favorites)
 
   useEffect(() => {
     setHeaderItem(<FavoritesStatus count={favorites.length} source={source} isLoading={isLoading} />)

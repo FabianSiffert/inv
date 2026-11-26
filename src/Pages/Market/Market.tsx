@@ -10,6 +10,7 @@ import { isSideSet, mainSetIdOf } from '../../util/api/pokemonTGC/setGroups'
 import { useCardNavigation } from '../../util/ui/cards/useCardNavigation'
 import { useVisibleCards } from '../../util/ui/cards/useVisibleCards'
 import { useStrings } from '../../util/ui/language/LanguageProvider'
+import { useDocumentTitle, useOpenCardName } from '../../util/ui/useDocumentTitle'
 import { useIsMobile } from '../../util/ui/useIsMobile'
 import CardList from './CardList/CardList'
 import { formatSetReleaseDate } from '../../util/format/date'
@@ -44,6 +45,7 @@ export default function Market() {
     setSearchParams(params, { replace: true })
   }, [selectedSetId, searchParams, setSearchParams])
   const visibleCards = useVisibleCards(cards)
+  useDocumentTitle(useOpenCardName(toCardEntries(cards ?? []), openCardId), selectedSet?.name)
 
   const isFetching = areSetsFetching || areCardsFetching
   const isMobile = useIsMobile()

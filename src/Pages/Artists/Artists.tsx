@@ -10,6 +10,7 @@ import { noBaseParams, useCardNavigation } from '../../util/ui/cards/useCardNavi
 import { useVisibleCards } from '../../util/ui/cards/useVisibleCards'
 import { useStrings } from '../../util/ui/language/LanguageProvider'
 import { SearchContext } from '../../util/ui/search/SearchProvider'
+import { useDocumentTitle, useOpenCardName } from '../../util/ui/useDocumentTitle'
 import { useIsMobile } from '../../util/ui/useIsMobile'
 import CardList from '../Market/CardList/CardList'
 import CardListStatus from '../Market/CardListStatus'
@@ -77,6 +78,7 @@ function ArtistOverview(props: ArtistOverviewProps) {
   const t = useStrings()
   const artists = useMemo(() => props.artists ?? [], [props.artists])
   const visibleArtists = useMemo(() => matchingArtists(artists, query), [artists, query])
+  useDocumentTitle(t.artists)
 
   if (props.error != null) {
     return (
@@ -123,6 +125,7 @@ function ArtistCards(props: ArtistCardsProps) {
   const t = useStrings()
   const visibleCards = useVisibleCards(cards)
   const { openCardId, openCard, stepToCard, closeCard } = useCardNavigation(noBaseParams)
+  useDocumentTitle(useOpenCardName(toCardEntries(cards ?? []), openCardId), artist?.name)
 
   return (
     <>

@@ -9,6 +9,7 @@ import { noBaseParams, useCardNavigation } from '../../util/ui/cards/useCardNavi
 import { useVisibleCards } from '../../util/ui/cards/useVisibleCards'
 import { LanguageContext, localizedName, useStrings } from '../../util/ui/language/LanguageProvider'
 import { SearchContext } from '../../util/ui/search/SearchProvider'
+import { useDocumentTitle, useOpenCardName } from '../../util/ui/useDocumentTitle'
 import { useIsMobile } from '../../util/ui/useIsMobile'
 import CardList from '../Market/CardList/CardList'
 import CardListStatus from '../Market/CardListStatus'
@@ -106,6 +107,7 @@ function GenerationOverview(props: GenerationOverviewProps) {
   const t = useStrings()
   const { query } = useContext(SearchContext)
   const { generation, pokemonIndex } = props
+  useDocumentTitle(generation && generationLabel(generation, germanNames))
 
   const pokemonOfGeneration = useMemo(
     () => (generation == undefined ? [] : (pokemonIndex ?? []).filter((entry) => isInGeneration(entry.number, generation))),
@@ -175,6 +177,7 @@ function PokemonCards(props: PokemonCardsProps) {
   const { pokemon, generation, cards } = props
   const visibleCards = useVisibleCards(cards)
   const { openCardId, openCard, stepToCard, closeCard } = useCardNavigation(noBaseParams)
+  useDocumentTitle(useOpenCardName(toCardEntries(cards ?? []), openCardId), pokemon && localizedName(pokemon, germanNames))
 
   return (
     <>

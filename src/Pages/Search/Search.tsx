@@ -9,6 +9,7 @@ import { useCardNavigation } from '../../util/ui/cards/useCardNavigation'
 import { LanguageContext, useStrings } from '../../util/ui/language/LanguageProvider'
 import { SearchContext } from '../../util/ui/search/SearchProvider'
 import { SortContext, sortEntries } from '../../util/ui/sort/SortProvider'
+import { useDocumentTitle, useOpenCardName } from '../../util/ui/useDocumentTitle'
 import { useIsMobile } from '../../util/ui/useIsMobile'
 import CardList from '../Market/CardList/CardList'
 import CardListStatus from '../Market/CardListStatus'
@@ -72,6 +73,7 @@ export default function Search() {
   const openEntry = sortedEntries.find((entry) => entry.card.id == openCardId)
   const { data: openSetCards } = useCardsOfSet(openEntry?.card.set.name)
   const fullOpenCard = openSetCards?.find((card) => card.id == openCardId)
+  useDocumentTitle(useOpenCardName(sortedEntries, openCardId), query, t.search)
   const displayedEntries = useMemo(
     () =>
       fullOpenCard == undefined
